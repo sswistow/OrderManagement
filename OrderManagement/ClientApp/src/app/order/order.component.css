@@ -1,0 +1,18 @@
+.v-divider {
+  border-left: 2px solid grey;
+  height: 100%;
+}
+
+.order-table {
+  overflow-y: scroll;
+  height: 250px;
+  background-color: #d8d8d8;
+}
+
+.add-pointer tr {
+  cursor: pointer;
+}
+
+.highlighted {
+  background-color: darkgrey;
+}

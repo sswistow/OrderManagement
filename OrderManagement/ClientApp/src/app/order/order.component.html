@@ -1,0 +1,113 @@
+
+<div class="container-fluid">
+
+  <h1>Orders</h1>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="col-sm-12">
+        <button type="button" class="btn btn-secondary btn-lg btn-block" (click)="addOrder()">Generuj zamówienie</button>
+      </div>
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col">
+            <div class="text-center p-3">
+              <h4>Zamówienia oczekujące</h4>
+            </div>
+            <div class="order-table">
+              <table class='table add-pointer' *ngIf="awaitingOrders$">
+                <tbody>
+                  <tr *ngFor="let order of awaitingOrders$" (click)="onSelectOrder(order)" [class.highlighted]="order === selectedOrder">
+                    <td>{{ order.id }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col">
+            <div class="text-center p-3">
+              <h4>Zamówienia zrealizowane</h4>
+            </div>
+            <div class="order-table">
+              <table class='table add-pointer' *ngIf="finishedOrders$">
+                <tbody>
+                  <tr *ngFor="let order of finishedOrders$" (click)="onSelectOrder(order)" [class.highlighted]="order === selectedOrder">
+                    <td>{{ order.id }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 pt-5" *ngIf="selectedOrder">
+        <div class="form-group row">
+          <label for="orderNumber" class="col-sm-2 col-form-label">Numer:</label>
+          <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="orderNumber" value="{{selectedOrder.id}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="orderDate" class="col-sm-2 col-form-label">Data utworzenia:</label>
+          <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="orderDate" value="{{selectedOrder.creationDate | date : 'dd/MM/yyyy'}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="orderState" class="col-sm-2 col-form-label">Status:</label>
+          <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="orderState" value="{{selectedOrder.state == 0 ? 'Oczekujące' : 'Zrealizowane'}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="orderOwnerThread" class="col-sm-2 col-form-label">Realizujący:</label>
+          <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="orderOwnerThread" value="{{(selectedOrder.threadId == null || selectedOrder.threadId == undefined) ? '' : 'Nazwa ' + selectedOrder.threadId}}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 v-divider">
+      <div class="col-sm-12">
+        <button type="button" class="btn btn-secondary btn-lg btn-block" (click)="addThread()">Dodaj</button>
+      </div>
+      <div class="col-md-12">
+        <div class="text-center p-3">
+          <h4>Realizacja zamówień</h4>
+        </div>
+        <div class="order-table">
+          <table class='table add-pointer' *ngIf="threads$">
+            <tbody>
+              <tr *ngFor="let thread of threads$" (click)="onSelectThread(thread)" [class.highlighted]="thread === selectedThread">
+                <td>{{ 'Nazwa ' + thread.id }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-12 pt-5" *ngIf="selectedThread">
+        <div class="form-group row">
+          <label for="threadName" class="col-sm-4 col-form-label">Nazwa:</label>
+          <div class="col-sm-8">
+            <input type="text" readonly class="form-control-plaintext" id="threadName" value="{{'Nazwa ' + selectedThread.id}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="threadInterval" class="col-sm-4 col-form-label">Interwał czasowy:</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="threadInterval" value="{{selectedThread.interval}}" (change)="onIntervalChange(intervalValue.value)" #intervalValue>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="threadState" class="col-sm-4 col-form-label">Status:</label>
+          <div class="col-sm-8">
+            <input type="text" readonly class="form-control-plaintext" id="threadState" value="{{selectedThread.state == 0 ? 'Pracuje' : 'Pauza'}}">
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <button type="button" class="btn btn-secondary btn-lg btn-block" (click)="changeThreadState()">{{selectedThread.state == 0 ? 'STOP' : 'START'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
